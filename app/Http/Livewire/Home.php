@@ -6,18 +6,51 @@ use Livewire\Component;
 use App\Url;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
+use Livewire\WithPagination;
 
 class Home extends Component
 {
-    public $links, $title, $original_url, $link_id, $platform_id, $user_id, $shorten_url;
+    use WithPagination;
+    
+    public    $title, $original_url, $link_id, $platform_id, $user_id, $shorten_url;
     public $updateMode = false;
-   
+    protected $links;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    public function render()
+    // public function mount(Url $link)
+    // {
+    //     $link->increment('visits');
+    //     return redirect($link->original_url);
+    // }
+
+    // public function linkTo(Url $link )
+    // {
+    //     $link->increment('visits');
+    //     return redirect($link->original_url);
+    // }
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');  
+    // }
+
+    public $search;
+
+    // protected $updatesQueryString = ['search'];
+
+    // public function updatingSearch(){
+    //     $this->resetPage();
+    // }
+
+    // public function mount()
+    // {
+    //     $this->search = request()->query('search', $this->search);
+    // }
+    
+     public function render()
     {
         $viewer = Role::find(1);
         $viewer ->givePermissionTo('view link');
@@ -25,11 +58,31 @@ class Home extends Component
         $maker = Role::find(2);
         $maker ->givePermissionTo('make link', 'delete link');
 
+        $this->links = Url::paginate(8);
 
-        $this->links = Url::all();
-        return view('livewire.home');
+        // if($this->search){
+        //     $links = Url::where('title', 'like', '%'.$this->search.'%')->get();
+        // }else{
+        //    $links = Url::get();
+        //     }
+        // return view('livewire.home',[
+        //     'links' => $links
+        // ]);
+
+        return view('livewire.home', [
+            'links' => $this->search === null ?
+                Url::latest()->paginate(8) :
+                Url::latest()->where('title', 'like', '%'.$this->search.'%')->paginate(8)
+        ]);
     }
   
+    public function filterPlatform()
+    {
+        if($this->filter == 1){
+            $this->links = Url::latest()->where('platform_id', 1)->paginate(8);
+        }
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -41,11 +94,6 @@ class Home extends Component
         $this->platform_id = '';
     }
    
-    public function show(Url $link)
-    {
-        $link->increment('visits');
-        return redirect($link->original_url);
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -82,7 +130,8 @@ class Home extends Component
         $this->title = $link->title;
         $this->original_url = $link->original_url;
         $this->shorten_url = $link->shorten_url;
-  
+        $this->platform_id= $link->platform_id;
+        
         $this->updateMode = true;
     }
   
@@ -114,6 +163,7 @@ class Home extends Component
         $link->update([
             'title' => $this->title,
             'shorten_url' => $this->shorten_url,
+            'platform_id' => $this->platform_id,
         ]);
   
         $this->updateMode = false;

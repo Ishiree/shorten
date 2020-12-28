@@ -16,8 +16,8 @@
         <select wire:model.prevent="platform_id" class="custom-select" id="inputGroupSelect01">
           <option selected>Choose...</option>
           <option value="1">Kitabisa</option>
-          <option value="2">Donasiberkah</option>
-          <option value="3">Amalsholeh</option>
+          <option value="3">Donasiberkah</option>
+          <option value="2">Amalsholeh</option>
         </select>
       </div>
     <button wire:click.prevent="store()" class="btn btn-success">Save</button>
