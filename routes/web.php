@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Home;
+use App\Http\Livewire;
 use App\Url;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +26,7 @@ Route::get('/', function () {
 // })
 Auth::routes();
 
+// Route::livewire('/datatable', 'datatable')->name('datatable');
 
 Route::livewire('/home','home')->middleware('auth')->name('home');
 Route::get('/{link}', function (Url $link)
@@ -33,6 +34,9 @@ Route::get('/{link}', function (Url $link)
     $link->increment('visits');
         return redirect($link->original_url);
 })->name('redirect');
+
+Route::livewire('/create','create')->middleware('auth')->name('createUrl');
+
 
 // Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/{link}', 'HomeController@mount')->name('redirect');

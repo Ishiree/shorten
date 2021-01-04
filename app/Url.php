@@ -10,6 +10,14 @@ class Url extends Model
 {
     protected $fillable = ['original_url', 'shorten_url', 'user_id', 'title','platform_id',];
     protected $appends = ['path'];
+    protected $guarded = [];
+
+    public static function search($query)
+    {
+        return empty($query) ? static::query()
+            : static::where('name', 'like', '%'.$query.'%')
+                ->orWhere('email', 'like', '%'.$query.'%');
+    }
 
     protected static function boot()
     {

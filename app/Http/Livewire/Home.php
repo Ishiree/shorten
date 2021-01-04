@@ -15,6 +15,13 @@ class Home extends Component
     public    $title, $original_url, $link_id, $platform_id, $user_id, $shorten_url;
     public $updateMode = false;
     protected $links;
+    public $kitabisa = false;
+    public $donasiberkah = false;
+    public $amalsholeh = false;
+    public $sortAsc = true;
+    public $sortField;
+    protected $updatesQueryString = ['search'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -49,7 +56,20 @@ class Home extends Component
     // {
     //     $this->search = request()->query('search', $this->search);
     // }
-    
+    public function updatingSearch(){
+        $this->resetPage();
+    }
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortAsc = ! $this->sortAsc;
+        } else {
+            $this->sortAsc = true;
+        }
+
+        $this->sortField = $field;
+    }
+
      public function render()
     {
         $viewer = Role::find(1);
@@ -59,28 +79,59 @@ class Home extends Component
         $maker ->givePermissionTo('make link', 'delete link');
 
         $this->links = Url::paginate(8);
+        
 
-        // if($this->search){
-        //     $links = Url::where('title', 'like', '%'.$this->search.'%')->get();
-        // }else{
-        //    $links = Url::get();
-        //     }
+        if($this->kitabisa == true){
+            $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 1)->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 1)->where('title', 'like', '%'.$this->search.'%')->paginate(8); 
+        }elseif($this->donasiberkah == true){
+            $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 3)->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 3)->where('title', 'like', '%'.$this->search.'%')->paginate(8); 
+        }elseif($this->amalsholeh == true){
+            $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 2)->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 2)->where('title', 'like', '%'.$this->search.'%')->paginate(8); 
+        }else{
+            $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('title', 'like', '%'.$this->search.'%')->paginate(8);
+        }
+
+
+        //     $links = Url::where('title', 'like', '%'.$this->search.'%');
+
         // return view('livewire.home',[
         //     'links' => $links
         // ]);
-
         return view('livewire.home', [
-            'links' => $this->search === null ?
-                Url::latest()->paginate(8) :
-                Url::latest()->where('title', 'like', '%'.$this->search.'%')->paginate(8)
+                
+            'links' => $links
         ]);
     }
-  
-    public function filterPlatform()
+
+    public function resetFilter()
     {
-        if($this->filter == 1){
-            $this->links = Url::latest()->where('platform_id', 1)->paginate(8);
-        }
+        $this->kitabisa = false;
+        $this->donasiberkah = false;
+        $this->amalsholeh = false;
+    }
+  
+    public function filterKitabisa()
+    {   $this->donasiberkah = false;
+        $this->amalsholeh = false;
+       return $this->kitabisa = true; 
+    }
+    public function filterDonasiberkah()
+    {   $this->kitabisa = false;
+        $this->amalsholeh = false;
+       return $this->donasiberkah = true;   
+    }
+    public function filterAmalsholeh()
+    {   $this->donasiberkah = false;
+        $this->kitabisa = false;
+       return $this->amalsholeh = true;   
     }
 
     /**
@@ -162,6 +213,7 @@ class Home extends Component
         $link = Url::find($this->link_id);
         $link->update([
             'title' => $this->title,
+            'original_url' => $this->original_url,
             'shorten_url' => $this->shorten_url,
             'platform_id' => $this->platform_id,
         ]);
