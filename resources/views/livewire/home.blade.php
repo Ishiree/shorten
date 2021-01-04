@@ -46,17 +46,14 @@
                     </div>
                 </div> --}}
                 <div x-data="{ open: false }">
-                    <button class="btn btn-success" type="button"  wire:click="resetFilter" @click="open = true">All Platform...</button>                            
-                        <ul class="mt-2" x-show="open" @click.away="open = false">
-                                <button class="mb-2 btn btn-success" wire:click="filterKitabisa">Kitabisa</button>
-                                <button class="mb-2 btn btn-success" wire:click="filterDonasiberkah">Donasiberkah</button>
-                                <button class="mb-2 btn btn-success" wire:click="filterAmalsholeh">Amalsholeh</button>
-                                <button class="mb-2 btn btn-success" wire:click="filterAmalsholeh">Amalsholeh</button>
-                                <button class="mb-2 btn btn-success" wire:click="filterAmalsholeh">Amalsholeh</button>
-                                <button class="mb-2 btn btn-success" wire:click="filterAmalsholeh">Amalsholeh</button>
-                                <button class="mb-2 btn btn-success" wire:click="filterAmalsholeh">Amalsholeh</button>
+                    <button class="btn btn-success" type="button"  wire:click="resetFilter" @click="open = true">All Platform . . .</button>                            
+                    
+                    <ul class="mt-2" x-show="open" @click.away="open = false">
+                            @foreach ($platforms as $platform)
+                            <button class="mb-2 btn btn-success" wire:click="filter{{Str::ucfirst($platform->nama)}}">{{Str::ucfirst($platform->nama)}}</button>
+                            @endforeach
                         </ul>
-                </div>
+                    </div>
             </div>
             <div class="col justify-content-end">
                 <div class="input-group mb-3">
@@ -74,7 +71,7 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th><a wire:click.prevent="sortBy('title')" role="button" href="#">
+                        <th><a style=":hover {none;}" wire:click.prevent="sortBy('title')" role="button" href="#">
                             Title
                             @include('includes._sort-icon', ['field' => 'title'])
                         </a></th>

@@ -1,7 +1,8 @@
 <?php
   
 namespace App\Http\Livewire;
-  
+
+use App\Platform;
 use Livewire\Component;
 use App\Url;
 use Illuminate\Support\Facades\Auth;
@@ -77,7 +78,7 @@ class Home extends Component
         
         $maker = Role::find(2);
         $maker ->givePermissionTo('make link', 'delete link');
-
+        $platforms = Platform::all();
         $this->links = Url::paginate(8);
         
 
@@ -107,7 +108,8 @@ class Home extends Component
         // ]);
         return view('livewire.home', [
                 
-            'links' => $links
+            'links' => $links,
+            'platforms' => $platforms
         ]);
     }
 
