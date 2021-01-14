@@ -13,15 +13,15 @@ class PlatformSeeder extends Seeder
     public function run()
     {
         Platform::create([
-            'kode' => 'KTBS',
+            'url_platform' => 'https://kitabisa.com/orang-baik/08bbe0ee2108cf456581b0a283ea4c37',
             'nama' => 'kitabisa'
         ]);
         Platform::create([
-            'kode' => 'AMLS',
+            'url_platform' => 'https://www.amalsholeh.com/lembaga/213839',
             'nama' => 'amalsholeh'
         ]);
         Platform::create([
-            'kode' => 'DBKH',
+            'url_platform' => 'https://donasiberkah.id/',
             'nama' => 'donasiberkah'
         ]);
     }

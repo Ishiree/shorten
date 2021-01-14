@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\Request;
 
 class ResetPasswordController extends Controller
 {
@@ -26,5 +27,10 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::INDEX;
+    protected function credentials(Request $request)
+    {
+    $credentials = $request->only($this->username(), 'password');
+    return array_merge($credentials, 'status', 'aktif');
+    }
 }

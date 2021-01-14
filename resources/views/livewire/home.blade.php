@@ -8,43 +8,20 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                @role ('maker')
-                <a class="btn btn-success" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                @hasanyrole('maker|administrator')
+                
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal1">
                     Create Shorten URL
-                  </a>
-                <div class="collapse" id="collapseExample">
-                    <div class="card">
-                        <div class="card-body">
-                            @if($updateMode)
-                                @include('livewire.update')
-                            @else
-                                @include('livewire.create')
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                @endrole
+                </button>
+                @include('livewire.create')
+                @endhasanyrole
+                
             </div>
             
         </div>
-            {{-- <div class="row justify-content-end mt-3">
-                <div class="col-md-6 ">
-                    
-                </div>
-            </div> --}}
-        
         <div class="row mt-3">
             <div class="col">
-                {{-- <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Dropdown button
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a wire:click.prevent="filterKitabisa()" class="dropdown-item" href="#">Kitabisa</a>
-                      <a class="dropdown-item" href="#" wire:click.prevent="filterDonasiberkah()">Donasiberkah</a>
-                      <a class="dropdown-item" href="#" wire:click.prevent="filterAmalsholeh()">Amalsholeh</a>
-                    </div>
-                </div> --}}
                 <div x-data="{ open: false }">
                     <button class="btn btn-success" type="button"  wire:click="resetFilter" @click="open = true">All Platform . . .</button>                            
                     
@@ -52,9 +29,10 @@
                             @foreach ($platforms as $platform)
                             <button class="mb-2 btn btn-success" wire:click="filter{{Str::ucfirst($platform->nama)}}">{{Str::ucfirst($platform->nama)}}</button>
                             @endforeach
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
             </div>
+            
             <div class="col justify-content-end">
                 <div class="input-group mb-3">
                     <input wire:model="search" type="text" class="form-control" placeholder="Search . . ." aria-label="Username" aria-describedby="basic-addon1">
@@ -63,48 +41,53 @@
                     </div>
                 </div>
             </div>
-            
-            {{-- <a class="btn btn-success " href="{{ route('createUrl') }}">Create Shorten URL</a> --}}
         </div>
-        <div class="table-responsive-md">
-            <table class="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th><a style=":hover {none;}" wire:click.prevent="sortBy('title')" role="button" href="#">
-                            Title
-                            @include('includes._sort-icon', ['field' => 'title'])
-                        </a></th>
-                        <th>Original Url</th>
-                        <th>Platform
-                          </th>
-                        <th>Shorten Url</th>
-                        @role ('maker')
-                        <th width="150px">Action</th>
-                        @endrole
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                    $no = 1    
-                    @endphp
-                    @foreach($links as $link)
-                    <tr>
-                        <td>{{ $no++ }}</td>
-                        <td>{{ $link->title }}</td>
-                        <td>{{ $link->original_url }}</td>
-                        <td>{{ $link->platform->nama }}</td>
-                        <td><a href="{{ route('redirect', $link->shorten_url) }}" target="_blank">{{ $link->shorten_url }}</a> </td>
-                        @role ('maker')
-                        <td>
-                        <button wire:click.prevent="edit({{ $link->id }})" class="btn btn-primary btn-sm">Edit</button>
-                            <button wire:click.prevent="delete({{ $link->id }})" class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                        @endrole
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="card border-success">
+            <div class="card-body">
+                <h3 class="mb-3">List <strong>Url</strong></h3>
+        <hr>
+                <div class="table-responsive-md">
+                    <table class="table table-bordered table-hovered table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th><a style=":hover {none;}" wire:click.prevent="sortBy('title')" role="button" href="#">
+                                    Title
+                                    @include('includes._sort-icon', ['field' => 'title'])
+                                </a></th>
+                                <th>Original Url</th>
+                                <th>Platform
+                                  </th>
+                                <th>Shorten Url</th>
+                                @hasanyrole ('maker|administrator')
+                                <th width="150px">Action</th>
+                                @endhasanyrole
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $no = 1    
+                            @endphp
+                            @foreach($links as $link)
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $link->title }}</td>
+                                <td>{{ $link->original_url }}</td>
+                                <td>{{ $link->platform->nama }}</td>
+                                <td><a href="{{ route('redirect', $link->shorten_url) }}" target="_blank">{{ $link->shorten_url }}</a> </td>
+                                @hasanyrole ('maker|administrator')
+                                <td>
+                                <a href="#exampleModal3" data-toggle="modal" wire:click.prevent="edit({{ $link->id }})" role="button" class="text-primary"><i class="fas fa-edit"></i></a>
+                                @include('livewire.update')
+                                <a role="button" wire:click.prevent="delete({{ $link->id }})" class="text-danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                                @endhasanyrole
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+            </div>
+        </div>
         </div>
         {{ $links->links() }}
       </div>

@@ -17,7 +17,6 @@ class UserSeeder extends Seeder
             'email' => 'viewer@link.test',
             'password' => bcrypt('12345678') 
         ]);
-
         $viewer->assignRole('viewer');
 
         $maker = User::create([
@@ -25,7 +24,13 @@ class UserSeeder extends Seeder
             'email' => 'maker@link.test',
             'password' => bcrypt('12345678') 
         ]);
-
         $maker->assignRole('maker');
+        
+        $admin = User::create([
+            'name' => 'admin',
+            'email' => 'admin@link.test',
+            'password' => bcrypt('12345678') 
+        ]);
+        $admin->assignRole('administrator');
     }
 }

@@ -15,7 +15,7 @@ class CreatePlatformsTable extends Migration
     {
         Schema::create('platforms', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');
+            $table->string('url_platform');
             $table->string('nama');
             $table->timestamps();
         });

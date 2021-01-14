@@ -21,6 +21,11 @@ class RoleSeeder extends Seeder
             'name' => 'maker',
             'guard_name' => 'web'
         ]);
+        
+        Role::create([
+            'name' => 'administrator',
+            'guard_name' => 'web'
+        ]);
 
         $viewer = Role::find(1);
 

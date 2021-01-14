@@ -42,7 +42,7 @@ class Url extends Model
         return asset("$this->shorten_url");
     }
 
-    public function Platform()
+    public function platform()
     {
         return $this->belongsTo(Platform::class, 'platform_id', 'id');
     }

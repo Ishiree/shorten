@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::INDEX;
 
     /**
      * Create a new controller instance.
@@ -42,5 +42,17 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // dd($user);
+    }
+
+        /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param Request $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return array_merge($request->only($this->username(), 'password'),
+        ['status' => 'aktif']);
     }
 }

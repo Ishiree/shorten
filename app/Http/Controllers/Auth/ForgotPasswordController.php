@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Request;
 
 class ForgotPasswordController extends Controller
 {
@@ -19,4 +20,9 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+    protected function credentials(Request $request)
+    {
+    $credentials = $request->only($this->username(), 'password');
+    return array_merge($credentials, 'status', 'aktif');
+    }
 }

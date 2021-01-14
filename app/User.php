@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','status',
     ];
 
     /**
@@ -42,4 +42,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'user_id', 'id');
     }
+
+    public function modelHasRoles()
+    {
+        return $this->morphMany('App\ModelHasRole', 'modelRole');
+    }
+
+    public function setPasswordAttribute($password)
+    {   
+    $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function findForPassport($identifier) {
+        return User::orWhere('email', $identifier)->where('status', 'aktif')->first();
+        }
 }

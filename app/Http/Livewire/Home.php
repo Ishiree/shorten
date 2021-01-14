@@ -78,6 +78,10 @@ class Home extends Component
         
         $maker = Role::find(2);
         $maker ->givePermissionTo('make link', 'delete link');
+
+        $admin = Role::find(3);
+        $admin ->givePermissionTo('administrator');
+
         $platforms = Platform::all();
         $this->links = Url::paginate(8);
         
@@ -101,6 +105,8 @@ class Home extends Component
         }
 
 
+        
+
         //     $links = Url::where('title', 'like', '%'.$this->search.'%');
 
         // return view('livewire.home',[
@@ -112,6 +118,8 @@ class Home extends Component
             'platforms' => $platforms
         ]);
     }
+
+
 
     public function resetFilter()
     {
@@ -185,7 +193,7 @@ class Home extends Component
         $this->shorten_url = $link->shorten_url;
         $this->platform_id= $link->platform_id;
         
-        $this->updateMode = true;
+        // $this->updateMode = true;
     }
   
     /**
@@ -195,7 +203,7 @@ class Home extends Component
      */
     public function cancel()
     {
-        $this->updateMode = false;
+        // $this->updateMode = false;
         $this->resetInputFields();
     }
   
@@ -220,7 +228,7 @@ class Home extends Component
             'platform_id' => $this->platform_id,
         ]);
   
-        $this->updateMode = false;
+        // $this->updateMode = false;
   
         session()->flash('message', 'Shorten URL Updated Successfully.');
         $this->resetInputFields();
