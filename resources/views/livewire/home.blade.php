@@ -22,15 +22,23 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <div x-data="{ open: false }">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Platforms</label>
+                    </div>
+                    <select wire:model.prevent="filtering" class="custom-select" id="inputGroupSelect01">
+                        <option value="{{ $allPlatform }}" selected>All Platform</option>
+                        @foreach ($platforms as $platform)
+                      <option value="{{ $platform->id }}">{{ $platform->nama }}</option>
+                      @endforeach
+                    </select>
+                </div>
+                {{-- <button type="submit" wire:click.prevent="filterPlatform">Filter</button> --}}
+                {{-- <div x-data="{ open: false }">
                     <button class="btn btn-success" type="button"  wire:click="resetFilter" @click="open = true">All Platform . . .</button>                            
                     
-                    <ul class="mt-2" x-show="open" @click.away="open = false">
-                            @foreach ($platforms as $platform)
-                            <button class="mb-2 btn btn-success" wire:click="filter{{Str::ucfirst($platform->nama)}}">{{Str::ucfirst($platform->nama)}}</button>
-                            @endforeach
-                    </ul>
-                </div>
+                    <livewire:list-url />
+                </div> --}}
             </div>
             
             <div class="col justify-content-end">
@@ -44,7 +52,7 @@
         </div>
         <div class="card border-success">
             <div class="card-body">
-                <h3 class="mb-3">List <strong>Url</strong></h3>
+                <h3 class="mb-3">List <strong class="text-success">Url</strong></h3>
         <hr>
                 <div class="table-responsive-md">
                     <table class="table table-bordered table-hovered table-striped mt-3">

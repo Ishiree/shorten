@@ -20,43 +20,18 @@ class Home extends Component
     public $donasiberkah = false;
     public $amalsholeh = false;
     public $sortAsc = true;
-    public $sortField;
+    public $sortField, $jenis;
     protected $updatesQueryString = ['search'];
-
+    public $filtering;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    // public function mount(Url $link)
-    // {
-    //     $link->increment('visits');
-    //     return redirect($link->original_url);
-    // }
-
-    // public function linkTo(Url $link )
-    // {
-    //     $link->increment('visits');
-    //     return redirect($link->original_url);
-    // }
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');  
-    // }
-
+    
     public $search;
-
-    // protected $updatesQueryString = ['search'];
-
-    // public function updatingSearch(){
-    //     $this->resetPage();
-    // }
-
-    // public function mount()
-    // {
-    //     $this->search = request()->query('search', $this->search);
-    // }
+    public $allPlatform;
+    
     public function updatingSearch(){
         $this->resetPage();
     }
@@ -70,7 +45,29 @@ class Home extends Component
 
         $this->sortField = $field;
     }
-
+    public function resetFilter()
+    {
+        $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('title', 'like', '%'.$this->search.'%')->paginate(8);
+        $this->resetPage();
+            return $links;
+    }   
+    public function filterPlatform()
+    {
+        if($this->filtering){
+            $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', $this->filtering)->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', $this->filtering)->where('title', 'like', '%'.$this->search.'%')->paginate(8);
+        }elseif($this->allPlatform){    
+            $links = $this->resetFilter();    
+        }else{
+            $links = $this->search === null ?
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->paginate(8) :
+            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('title', 'like', '%'.$this->search.'%')->paginate(8);
+        }
+        return $links;
+    }
      public function render()
     {
         $viewer = Role::find(1);
@@ -83,66 +80,18 @@ class Home extends Component
         $admin ->givePermissionTo('administrator');
 
         $platforms = Platform::all();
+
+        
         $this->links = Url::paginate(8);
+        $this->links = $this->filterPlatform(); 
         
-
-        if($this->kitabisa == true){
-            $links = $this->search === null ?
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 1)->paginate(8) :
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 1)->where('title', 'like', '%'.$this->search.'%')->paginate(8); 
-        }elseif($this->donasiberkah == true){
-            $links = $this->search === null ?
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 3)->paginate(8) :
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 3)->where('title', 'like', '%'.$this->search.'%')->paginate(8); 
-        }elseif($this->amalsholeh == true){
-            $links = $this->search === null ?
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 2)->paginate(8) :
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('platform_id', 2)->where('title', 'like', '%'.$this->search.'%')->paginate(8); 
-        }else{
-            $links = $this->search === null ?
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->paginate(8) :
-            Url::orderBy('title', $this->sortAsc ? 'asc' : 'desc')->where('title', 'like', '%'.$this->search.'%')->paginate(8);
-        }
-
-
-        
-
-        //     $links = Url::where('title', 'like', '%'.$this->search.'%');
-
-        // return view('livewire.home',[
-        //     'links' => $links
-        // ]);
         return view('livewire.home', [
-                
-            'links' => $links,
+            
+            'links' => $this->links,
             'platforms' => $platforms
         ]);
     }
 
-
-
-    public function resetFilter()
-    {
-        $this->kitabisa = false;
-        $this->donasiberkah = false;
-        $this->amalsholeh = false;
-    }
-  
-    public function filterKitabisa()
-    {   $this->donasiberkah = false;
-        $this->amalsholeh = false;
-       return $this->kitabisa = true; 
-    }
-    public function filterDonasiberkah()
-    {   $this->kitabisa = false;
-        $this->amalsholeh = false;
-       return $this->donasiberkah = true;   
-    }
-    public function filterAmalsholeh()
-    {   $this->donasiberkah = false;
-        $this->kitabisa = false;
-       return $this->amalsholeh = true;   
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -217,16 +166,12 @@ class Home extends Component
         $validatedDate = $this->validate([
             'title' => 'required',
             'original_url' => 'required',
-            'platform_id' => 'required'
+            'platform_id' => 'required',
+            'shorten_url' => 'unique:urls,shorten_url'
         ]);
   
         $link = Url::find($this->link_id);
-        $link->update([
-            'title' => $this->title,
-            'original_url' => $this->original_url,
-            'shorten_url' => $this->shorten_url,
-            'platform_id' => $this->platform_id,
-        ]);
+        $link->update($validatedDate);
   
         // $this->updateMode = false;
   
