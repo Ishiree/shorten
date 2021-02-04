@@ -36,6 +36,7 @@
                 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+                    @if(Auth::user())   
                     <ul class="navbar-nav mr-auto">
                         <a class=" nav-link" href="{{ route('home') }}">Url</a>
                         <a class=" nav-link" href="{{ route('platform') }}">Platform</a>
@@ -43,6 +44,7 @@
                         <a class=" nav-link" href="{{ route('administrator') }}">User</a>
                         @endrole
                     </ul>
+                    @endif
 
                     
                     <!-- Right Side Of Navbar -->
@@ -52,11 +54,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
-                        @if (Route::has('register'))
+                        {{-- @if (Route::has('register'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
-                        @endif
+                        @endif --}}
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
