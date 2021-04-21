@@ -21,7 +21,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/all.css') }}" rel="stylesheet">
-    <livewire:styles/>
+    {{-- <livewire:styles/> --}}
+    @livewireStyles
 </head>
 <body>
     <div id="app">
@@ -90,6 +91,7 @@
             @yield('content')
         </main>
     </div>
-    <livewire:scripts/>
+    {{-- <livewire:scripts/> --}}
+    @livewireScripts
 </body>
 </html>
