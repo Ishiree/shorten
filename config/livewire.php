@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'asset_url'  => 'http://localhost/shorten/public',
+    'asset_url'  => 'https://kebaikan.link',
 
     /*
     |--------------------------------------------------------------------------
