@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    // return Redirect::to('https://griyayatim.com/');
-    return view('welcome');
+    return Redirect::to('https://griyayatim.com/');
+    // return view('welcome');
 });
 
 Auth::routes();
