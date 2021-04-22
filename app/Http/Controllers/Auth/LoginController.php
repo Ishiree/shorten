@@ -39,6 +39,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+ 
+        $request->session()->flush();
+ 
+        $request->session()->regenerate();
+ 
+        return redirect('login');
+            // ->withSuccess('Terimakasih, selamat datang kembali!');
+    }
+
     protected function authenticated(Request $request, $user)
     {
         // dd($user);
