@@ -31,7 +31,8 @@
                                 <th>{{ $countUrl = App\Url::where('platform_id', $platform->id)->sum('visits') }}</th>
                                 @hasanyrole ('maker|administrator')
                                 <th><a role="button" wire:click.prevent="edit({{ $platform->id }})" class="text-primary"><i class="fas fa-edit"></i></a>
-                                    <a role="button" wire:click.prevent="delete({{ $platform->id }})" class="text-danger"><i class="fas fa-trash"></i></a></th>
+                                    {{-- <a role="button" wire:click.prevent="delete({{ $platform->id }})" class="text-danger"><i class="fas fa-trash"></i></a> --}}
+                                </th>
                                 @endhasanyrole
                             </tr>
                             @endforeach

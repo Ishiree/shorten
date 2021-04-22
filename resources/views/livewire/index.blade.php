@@ -20,7 +20,7 @@
                 <h3 class="display-3 card-text">{{ $countPlatform }}</h3>
                 <br>
                 <br>
-                    <a href="#" class="btn btn-block btn-success">List Platform</a>
+                    <a href="{{ route('platform') }}" class="btn btn-block btn-success">List Platform</a>
             </div>
             </div>
         
@@ -33,7 +33,7 @@
                 <h3 class="display-3 card-text">{{ $countUrl }}</h3>
                 <br>
                 <br>
-                    <a href="#" class="btn btn-block btn-success">List URL</a>
+                    <a href="{{ route('home') }}" class="btn btn-block btn-success">List URL</a>
             </div>
         </div>
         
@@ -47,7 +47,7 @@
                 <br>
                 <br>
                 
-                <a href="#" class="btn btn-block btn-success">List URL</a>
+                <a href="{{ route('home') }}" class="btn btn-block btn-success">List URL</a>
                 
             </div>
             </div>
