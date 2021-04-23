@@ -2,7 +2,7 @@
     <div class="form-group">
         <h3 class="mb-3">Add <strong>User</strong></h3>
         <hr>
-        <input type="text" class="form-control" id="name" placeholder="Enter username" wire:model.debounce.2000s="name">
+        <input type="text" class="form-control" id="name" placeholder="Enter name" wire:model.debounce.2000s="name">
         @error('name') <span class="text-danger">{{ $message }}</span>@enderror
     </div>
     <div class="form-group">

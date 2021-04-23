@@ -84,8 +84,8 @@
                                 <td>{{ $link->original_url }}</td>
                                 <td>{{ $link->platform->nama }}</td>
                                 <td><a href="{{ route('redirect', $link->shorten_url) }}" target="_blank">{{ $link->shorten_url }}</a> </td>
-                                @hasanyrole ('maker|administrator')
                                 <td>{{ $link->visits }}</td>
+                                @hasanyrole ('maker|administrator')
                                 <td>
                                 <a href="#exampleModal3" data-toggle="modal" wire:click.prevent="edit({{ $link->id }})" role="button" class="text-primary"><i class="fas fa-edit"></i></a>
                                 @include('livewire.update')
