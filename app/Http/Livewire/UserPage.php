@@ -2,12 +2,16 @@
 
 namespace App\Http\Livewire;
 
+use App\Url;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class UserPage extends Component
 {
+    use WithPagination;
+
     public  $name,
             $email,
             $password,
@@ -19,8 +23,10 @@ class UserPage extends Component
         $user = User::findOrFail(Auth::user()->id);
         $this->name = $user->name;
         $this->email = $user->email;
+        $links = Url::all()->where('user_id', Auth::user()->id);
         return view('livewire.user-page',
     [
+        'links' => $links,
         'user' => $user
     ]);
     }
